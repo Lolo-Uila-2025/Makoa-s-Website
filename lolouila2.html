@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Basic Blog - Banana Kit Colors with Jump Scare</title>
+  <!-- Nunito font -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background-color: #fffbe6; /* light banana yellow */
+      color: #4b4b2f; /* dark olive green */
+      overflow-x: hidden;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.2rem;
+      color: #f5b700; /* bright banana yellow */
+    }
+    header p {
+      color: #a27c00; /* darker mustard */
+      font-style: italic;
+    }
+    article.post {
+      background: #fff9d9; /* pale banana cream */
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(245, 183, 0, 0.3);
+      transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    }
+    article.post:hover {
+      box-shadow: 0 6px 15px rgba(245, 183, 0, 0.6);
+      background-color: #fff7b8; /* brighter banana highlight */
+    }
+    article.post h2 {
+      margin: 0 0 0.3rem 0;
+      color: #d97f00; /* warm orange */
+    }
+    article.post time {
+      font-size: 0.85rem;
+      color: #7f5e00; /* olive brown */
+    }
+    article.post p.excerpt {
+      color: #6b6b3b; /* olive green */
+      margin-top: 0.5rem;
+    }
+    #post-view {
+      background: #fff9d9;
+      border-radius: 8px;
+      padding: 2rem;
+      display: none;
+      box-shadow: 0 3px 6px rgba(245, 183, 0, 0.3);
+      position: relative;
+      min-height: 300px;
+    }
+    #post-view h2 {
+      margin-top: 0;
+      color: #d97f00;
+    }
+    #post-view time {
+      font-size: 0.85rem;
+      color: #7f5e00;
+    }
+    #post-view p.content {
+      margin-top: 1rem;
+      line-height: 1.6;
+      white-space: pre-line;
+      color: #4b4b2f;
+    }
+    #back-btn {
+      margin-top: 2rem;
+      padding: 0.6rem 1.2rem;
+      background-color: #f5b700;
+      border: none;
+      color: #4b4b2f;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+    }
+    #back-btn:hover {
+      background-color: #d18a00;
+      color: #fff;
+    }
+
+    /* Jump scare styles */
+    #jump-scare {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      cursor: pointer;
+    }
+    #jump-scare img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #fff700;
+      animation: jump 0.1s ease-in-out 5;
+    }
+    @keyframes jump {
+      0%, 100% { transform: translate(0, 0); }
+      20%, 60% { transform: translate(-10px, 0); }
+      40%, 80% { transform: translate(10px, 0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Basic Blog</h1>
+    <p>Simple blog to share my thoughts</p>
+  </header>
+
+  <section id="posts-list"></section>
+
+  <section id="post-view">
+    <h2></h2>
+    <time></time>
+    <p class="content"></p>
+    <button id="back-btn">← Back to Posts</button>
+  </section>
+
+  <!-- Jump scare container -->
+  <div id="jump-scare">
+    <img src="" alt="Jump Scare" />
+  </div>
+
+  <script>
+    // Replace this with your jump scare image URL
+    const jumpScareImageURL = 'skibidi.jpg'; // example scary image URL
+
+    // Sample blog posts data - 5 posts (last is jump scare)
+    const posts = [
+      {
+        id: 1,
+        title: "Welcome to My Blog",
+        date: "2025-06-09",
+        excerpt: "This is my first blog post. I'm excited to share my thoughts with you!",
+        content: `Welcome! Today im talking about my favorite game we did for rez life, capture the flag! Even though we got scolded after it was still super fun.`
+      },
+      {
+        id: 2,
+        title: "Why I Love Coding My Arduino",
+        date: "2025-06-10",
+        excerpt: "I got to build a video game like bro, thats awesome.\n\nWhether it's rock, paper sciscorrs, ish, or just a reaction speed test — the possibilities are endless!"
+      },
+      {
+        id: 3,
+        title: "My Favorite Project!",
+        date: "2025-06-11",
+        excerpt: "it's my favorite project I did this summer!",
+        content: `The Website! It just was cool to code this into a actually working site!`
+      },
+      {
+        id: 4,
+        title: "Why I like Rez life!",
+        date: "2025-06-12",
+        excerpt: "(Rez Life is the residential time and people that oversee what we do for the end of the day and the very beginning)",
+        content: `Five Reasons why I like Rez Life.\n\nUncle's stay so cool.\n1. Cool activity's.\n2. Good food.\n3. They play banger music.\n4. They can do magic tricks.\n\nThats Why Rez Life is skibidi!`
+      },
+      {
+        id: 5,
+        title: "dontClick.exe",
+        date: "2025-06-13",
+        excerpt: "dhpalao ol'k ,tf dhyupunz zxbhyl uva, ybuulao",
+        content: "" // no normal content for jump scare
+      }
+    ];
+
+    const postsListEl = document.getElementById('posts-list');
+    const postViewEl = document.getElementById('post-view');
+    const postTitleEl = postViewEl.querySelector('h2');
+    const postDateEl = postViewEl.querySelector('time');
+    const postContentEl = postViewEl.querySelector('.content');
+    const backBtn = document.getElementById('back-btn');
+    const jumpScareEl = document.getElementById('jump-scare');
+    const jumpScareImg = jumpScareEl.querySelector('img');
+
+    // Render list of posts
+    function renderPosts() {
+      jumpScareEl.style.display = 'none';
+      postViewEl.style.display = 'none';
+      postsListEl.style.display = 'block';
+
+      postsListEl.innerHTML = posts.map(post => `
+        <article class="post" data-id="${post.id}">
+          <h2>${post.title}</h2>
+          <time datetime="${post.date}">${new Date(post.date).toLocaleDateString()}</time>
+          <p class="excerpt">${post.excerpt}</p>
+        </article>
+      `).join('');
+
+      // Add click event for each post
+      document.querySelectorAll('.post').forEach(postEl => {
+        postEl.addEventListener('click', () => {
+          const postId = postEl.getAttribute('data-id');
+          showPost(postId);
+        });
+      });
+    }
+
+    // Show individual post content or jump scare
+    function showPost(id) {
+      const post = posts.find(p => p.id == id);
+      if (!post) return;
+
+      // If jump scare post
+      if (post.title === "dontClick.exe") {
+        postsListEl.style.display = 'none';
+        postViewEl.style.display = 'none';
+
+        jumpScareImg.src = jumpScareImageURL;
+        jumpScareEl.style.display = 'flex';
+        return;
+      }
+
+      // Normal post display
+      jumpScareEl.style.display = 'none';
+      postsListEl.style.display = 'none';
+      postViewEl.style.display = 'block';
+
+      postTitleEl.textContent = post.title;
+      postDateEl.textContent = new Date(post.date).toLocaleDateString();
+      postDateEl.setAttribute('datetime', post.date);
+      postContentEl.textContent = post.content;
+    }
+
+    // Back button handler
+    backBtn.addEventListener('click', () => {
+      renderPosts();
+    });
+
+    // Clicking the jump scare hides it and returns to posts list
+    jumpScareEl.addEventListener('click', () => {
+      jumpScareEl.style.display = 'none';
+      renderPosts();
+    });
+
+    // Initialize the blog by showing posts list
+    renderPosts();
+  </script>
+</body>
+<html>
